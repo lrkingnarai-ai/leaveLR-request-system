@@ -74,7 +74,7 @@
                     <h2 id="calendarMonthYear" class="text-lg font-bold text-slate-700"></h2>
                     <div class="flex items-center gap-1">
                         <button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-100 rounded-lg text-slate-600 transition"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button onclick="goToCurrentMonth()" class="px-3 py-1 text-xs bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 transition">เดือนนี้</button>
+                        <button onclick="goToCurrentMonth()" class="px-3 py-1 text-xs bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 transition">ธันวาคม 2569</button>
                         <button onclick="changeMonth(1)" class="p-2 hover:bg-slate-100 rounded-lg text-slate-600 transition"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
@@ -87,9 +87,8 @@
                 <!-- Days Grid -->
                 <div id="calendarDays" class="grid grid-cols-7 gap-1"></div>
 
-                <div class="mt-4 flex items-center justify-between text-xs text-slate-500 border-t pt-3">
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> อนุมัติแล้ว</span>
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> รออนุมัติ</span>
+                <div class="mt-4 flex items-center justify-between text-xs text-slate-500 border-t pt-3 flex-wrap gap-2">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-400 inline-block"></span> วันหยุดนักขัตฤกษ์</span>
                     <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span> วันที่เลือก</span>
                 </div>
             </div>
@@ -105,44 +104,24 @@
 
         </div>
 
-        <!-- Right Column: Queue & Timeline -->
+        <!-- Right Column: Guidelines -->
         <div class="space-y-6">
             
-            <!-- Statistics Quick View -->
-            <div class="grid grid-cols-3 gap-3">
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                    <p class="text-xs text-slate-400">คำขอทั้งหมด</p>
-                    <p id="statTotal" class="text-xl font-bold text-slate-700 mt-1">0</p>
+            <!-- กล่องแสดงหลักเกณฑ์การเขียนขอหยุด/ลาพักผ่อน -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center space-x-2 mb-4">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-800">หลักเกณฑ์การเขียนขอหยุด ,ขอลาพักผ่อน</h3>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                    <p class="text-xs text-slate-400">รออนุมัติ</p>
-                    <p id="statPending" class="text-xl font-bold text-amber-500 mt-1">0</p>
+                <div class="space-y-2 text-gray-600 text-sm leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <p><strong>1.</strong> <span class="text-rose-600 font-medium">ไม่อนุญาตให้ขอหยุดในวันหยุดนักขัตฤกษ์</span> (ระบบจะบล็อกอัตโนมัติ)</p>
+                    <p><strong>2.</strong> เปิดให้เริ่มยื่นขอหยุดได้ตั้งแต่วันที่ <span class="text-indigo-600 font-medium">1 ธันวาคม 2569</span> เป็นต้นไป</p>
+                    <p><strong>3.</strong> ไม่ควรขอหยุดวันเสาร์-อาทิตย์ทุกสัปดาห์ใน 1 เดือน (ขอได้ไม่เกิน 1 ครั้ง/เดือน/คน)</p>
+                    <p><strong>4.</strong> การขอหยุดไม่ควรซ้ำกันเกิน 2 คน (ให้สิทธิ์คนที่ขอลำดับที่ 1 และ 2 ก่อน)</p>
+                    <p><strong>5.</strong> ขอหยุดได้ไม่เกิน 2 ครั้ง/เดือน/คน</p>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                    <p class="text-xs text-slate-400">อนุมัติแล้ว</p>
-                    <p id="statApproved" class="text-xl font-bold text-emerald-500 mt-1">0</p>
-                </div>
-            </div>
-
-            <!-- Queue & Timeline List -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col h-[520px]">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-slate-700 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved text-indigo-600"></i> ลำดับคำขอ (Secure Queue)
-                    </h3>
-                    <span class="text-xs text-slate-400">Locked if Approved</span>
-                </div>
-
-                <div class="mb-3">
-                    <select id="statusFilter" onchange="renderQueue()" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="ALL">แสดงทั้งหมด</option>
-                        <option value="PENDING">รออนุมัติ</option>
-                        <option value="APPROVED">อนุมัติแล้ว (ล็อกการแก้ไข)</option>
-                        <option value="REJECTED">ไม่อนุมัติ</option>
-                    </select>
-                </div>
-
-                <div id="queueContainer" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
             </div>
 
         </div>
@@ -175,17 +154,18 @@
                         <select id="leaveType" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="ลาพักร้อน">ลาพักร้อน</option>
                             <option value="เวร OFF">เวร OFF</option>
+                            <option value="อบรม/ประชุม">อบรม/ประชุม</option>
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">ตั้งแต่วันที่ *</label>
-                        <input type="date" id="startDate" required onchange="validateDates('startDate', 'endDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">ตั้งแต่วันที่ * (เริ่ม 1 ธ.ค. 69)</label>
+                        <input type="date" id="startDate" required min="2026-12-01" onchange="validateDates('startDate', 'endDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">ถึงวันที่ *</label>
-                        <input type="date" id="endDate" required onchange="validateDates('startDate', 'endDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="date" id="endDate" required min="2026-12-01" onchange="validateDates('startDate', 'endDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
                 <div>
@@ -208,7 +188,7 @@
                 <button onclick="closeCancelModal()" class="text-rose-200 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="cancelForm" onsubmit="handleCancelSubmit(event)" class="p-6 space-y-4">
-                <p class="text-xs text-slate-500">ระบุชื่อและช่วงวันที่ต้องการยกเลิก (หากรายการถูกอนุมัติแล้ว ระบบจะไม่อนุญาตให้ยกเลิกเองอัตโนมัติ ต้องติดต่อหัวหน้างาน)</p>
+                <p class="text-xs text-slate-500">ระบุชื่อและช่วงวันที่ต้องการยกเลิกคำขอ</p>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อ-นามสกุล (ผู้ขอลา) *</label>
                     <input type="text" id="cancelName" required placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
@@ -216,11 +196,11 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">จากวันที่ *</label>
-                        <input type="date" id="cancelStartDate" required onchange="validateDates('cancelStartDate', 'cancelEndDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                        <input type="date" id="cancelStartDate" required min="2026-12-01" onchange="validateDates('cancelStartDate', 'cancelEndDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">ถึงวันที่ *</label>
-                        <input type="date" id="cancelEndDate" required onchange="validateDates('cancelStartDate', 'cancelEndDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                        <input type="date" id="cancelEndDate" required min="2026-12-01" onchange="validateDates('cancelStartDate', 'cancelEndDate')" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
                     </div>
                 </div>
                 <div class="pt-2 flex gap-3">
@@ -283,40 +263,24 @@
     <!-- JavaScript Application Logic -->
     <script>
         let leaveRequests = [];
-        let currentDate = new Date();
-        let selectedDateStr = formatDateKey(new Date());
+        let currentDate = new Date(2026, 11, 1); // เริ่มต้นที่ ธันวาคม 2569
+        let selectedDateStr = "2026-12-01";
 
         const TH_MONTHS = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
 
-        const defaultMockData = [
-            {
-                id: "REQ-1001",
-                name: "สมชาย ใจดี",
-                dept: "พยาบาล",
-                type: "ลาพักร้อน",
-                startDate: getOffsetDateString(2),
-                endDate: getOffsetDateString(4),
-                reason: "ท่องเที่ยวพักผ่อนต่างจังหวัด",
-                status: "APPROVED",
-                timestamp: Date.now() - 86400000 * 3
-            },
-            {
-                id: "REQ-1002",
-                name: "วิไล สุขสันต์",
-                dept: "ผู้ช่วยเหลือคนไข้",
-                type: "ลากิจ",
-                startDate: getOffsetDateString(5),
-                endDate: getOffsetDateString(5),
-                reason: "ทำธุระทางราชการ",
-                status: "PENDING",
-                timestamp: Date.now() - 86400000 * 2
-            }
+        const publicHolidays = [
+            "2026-12-05", "2026-12-10", "2026-12-31",
+            "2027-01-01", "2027-02-12", "2027-03-15", "2027-04-06",
+            "2027-04-13", "2027-04-14", "2027-04-15", "2027-05-01",
+            "2027-05-04", "2027-05-20", "2027-06-03", "2027-07-18",
+            "2027-07-19", "2027-07-28", "2027-08-12", "2027-10-13",
+            "2027-10-23", "2027-12-05", "2027-12-10", "2027-12-31"
         ];
 
-        function getOffsetDateString(offsetDays) {
-            const d = new Date();
-            d.setDate(d.getDate() + offsetDays);
-            return formatDateKey(d);
+        const defaultMockData = [];
+
+        function isHoliday(dateStr) {
+            return publicHolidays.includes(dateStr);
         }
 
         function formatDateKey(date) {
@@ -327,39 +291,23 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-    loadData();
-    
-    const todayStr = formatDateKey(new Date());
-    
-    // คำนวณวันที่ล่วงหน้า 1 ปี (365 วัน)
-    const maxDate = new Date();
-    maxDate.setFullYear(maxDate.getFullYear() + 1);
-    const maxDateStr = formatDateKey(maxDate);
-
-    // กำหนดข้อจำกัด min และ max ให้ช่องวันที่ในฟอร์มลา
-    const startInput = document.getElementById('startDate');
-    const endInput = document.getElementById('endDate');
-    
-    startInput.min = todayStr;
-    startInput.max = maxDateStr;
-    endInput.min = todayStr;
-    endInput.max = maxDateStr;
-
-    startInput.value = todayStr;
-    endInput.value = todayStr;
-
-    document.getElementById('cancelStartDate').value = todayStr;
-    document.getElementById('cancelEndDate').value = todayStr;
-    renderAll();
-});
+            loadData();
+            
+            document.getElementById('startDate').value = "2026-12-01";
+            document.getElementById('endDate').value = "2026-12-01";
+            document.getElementById('cancelStartDate').value = "2026-12-01";
+            document.getElementById('cancelEndDate').value = "2026-12-01";
+            
+            renderAll();
+        });
 
         function loadData() {
-            const saved = localStorage.getItem('leave_requests_db_secure');
+            const saved = localStorage.getItem('leave_requests_db_v3');
             if (saved) {
                 try {
                     leaveRequests = JSON.parse(saved);
                 } catch (e) {
-                    leaveRequests = defaultMockData;
+                    leaveRequests = [];
                 }
             } else {
                 leaveRequests = defaultMockData;
@@ -368,11 +316,11 @@
         }
 
         function saveData() {
-            localStorage.setItem('leave_requests_db_secure', JSON.stringify(leaveRequests));
+            localStorage.setItem('leave_requests_db_v3', JSON.stringify(leaveRequests));
         }
 
         function resetData() {
-            if (confirm("คุณต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นใช่หรือไม่?")) {
+            if (confirm("คุณต้องการล้างข้อมูลคำขอทั้งหมดใช่หรือไม่?")) {
                 leaveRequests = defaultMockData;
                 saveData();
                 renderAll();
@@ -384,7 +332,14 @@
             renderCalendar();
             renderQueue();
             renderDailySummary();
-            updateStats();
+        }
+
+        function validateDates(startId, endId) {
+            const startVal = document.getElementById(startId).value;
+            const endVal = document.getElementById(endId).value;
+            if (startVal && endVal && startVal > endVal) {
+                document.getElementById(endId).value = startVal;
+            }
         }
 
         function renderCalendar() {
@@ -431,26 +386,30 @@
                 };
 
                 const isSelected = (dateStr === selectedDateStr);
-                const isToday = (dateStr === formatDateKey(new Date()));
+                const holiday = isHoliday(dateStr);
 
                 if (isSelected) {
                     div.classList.add('ring-2', 'ring-indigo-600', 'bg-indigo-50/30');
+                }
+
+                if (holiday) {
+                    div.classList.add('bg-rose-50/60', 'border-rose-200');
                 }
 
                 const leavesOnThisDay = leaveRequests.filter(req => req.status !== 'REJECTED' && dateStr >= req.startDate && dateStr <= req.endDate);
 
                 div.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <span class="font-medium ${isToday ? 'bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center font-bold' : ''}">${dayNum}</span>
+                        <span class="font-medium ${holiday ? 'bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]' : ''}">${dayNum}</span>
                         ${leavesOnThisDay.length > 0 ? `<span class="bg-indigo-100 text-indigo-700 text-[10px] px-1 rounded font-semibold">${leavesOnThisDay.length}</span>` : ''}
                     </div>
                     <div class="space-y-0.5 overflow-hidden">
-                        ${leavesOnThisDay.slice(0, 2).map(l => `
+                        ${holiday ? `<div class="truncate text-[9px] px-1 py-0.5 rounded bg-rose-100 text-rose-800 font-medium">วันหยุดนักขัตฤกษ์</div>` : ''}
+                        ${leavesOnThisDay.slice(0, 1).map(l => `
                             <div class="truncate text-[9px] px-1 py-0.5 rounded ${l.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
                                 ${l.name.split(' ')[0]}
                             </div>
                         `).join('')}
-                        ${leavesOnThisDay.length > 2 ? `<div class="text-[9px] text-slate-400 text-center">+อีก ${leavesOnThisDay.length - 2}</div>` : ''}
                     </div>
                 `;
             } else {
@@ -466,7 +425,7 @@
         }
 
         function goToCurrentMonth() {
-            currentDate = new Date();
+            currentDate = new Date(2026, 11, 1);
             renderCalendar();
         }
 
@@ -477,10 +436,11 @@
 
             const [y, m, d] = selectedDateStr.split('-');
             const thaiDateStr = `${parseInt(d)} ${TH_MONTHS[parseInt(m) - 1]} ${parseInt(y) + 543}`;
-            titleEl.innerText = `สรุปผู้ลาหยุดวันที่ ${thaiDateStr}`;
+            
+            let holidayText = isHoliday(selectedDateStr) ? ` <span class="text-rose-600 text-xs font-semibold">(วันหยุดนักขัตฤกษ์ - ไม่อนุญาตให้ขอหยุด)</span>` : '';
+            titleEl.innerHTML = `สรุปวันที่ ${thaiDateStr}${holidayText}`;
 
             const activeLeaves = leaveRequests.filter(req => req.status !== 'REJECTED' && selectedDateStr >= req.startDate && selectedDateStr <= req.endDate);
-
             badgeEl.innerText = `${activeLeaves.length} คนหยุดวันนี้`;
 
             if (activeLeaves.length === 0) {
@@ -500,7 +460,7 @@
                             ${req.name.charAt(0)}
                         </div>
                         <div>
-                            <p class="font-semibold text-slate-700 text-sm">${req.name} ${req.status === 'APPROVED' ? '<i class="fa-solid fa-lock text-[10px] text-emerald-600" title="อนุมัติและล็อกแล้ว"></i>' : ''}</p>
+                            <p class="font-semibold text-slate-700 text-sm">${req.name}</p>
                             <p class="text-slate-400 text-[11px]">${req.dept} <span class="text-indigo-600 font-medium">${req.type}</span> (${req.startDate} ถึง ${req.endDate})</p>
                         </div>
                     </div>
@@ -512,69 +472,84 @@
         }
 
         function renderQueue() {
-            const filterValue = document.getElementById('statusFilter').value;
-            const container = document.getElementById('queueContainer');
+            // ฟังก์ชันรองรับกรณีเรียกใช้งาน แต่ถอนองค์ประกอบ UI ออกแล้ว
+        }
 
-            let sorted = [...leaveRequests].sort((a, b) => a.timestamp - b.timestamp);
+        function handleLeaveSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('employeeName').value.trim();
+            const dept = document.getElementById('employeeDept').value;
+            const type = document.getElementById('leaveType').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const reason = document.getElementById('leaveReason').value.trim();
 
-            if (filterValue !== 'ALL') {
-                sorted = sorted.filter(r => r.status === filterValue);
+            let curr = new Date(startDate);
+            let last = new Date(endDate);
+            let holidayFound = null;
+
+            while (curr <= last) {
+                let dateStr = formatDateKey(curr);
+                if (isHoliday(dateStr)) {
+                    holidayFound = dateStr;
+                    break;
+                }
+                curr.setDate(curr.getDate() + 1);
             }
 
-            if (sorted.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-slate-400 text-xs">
-                        <i class="fa-solid fa-folder-open text-2xl mb-2 block opacity-40"></i>
-                        ไม่พบรายการคำขอในเงื่อนไขนี้
-                    </div>
-                `;
+            if (holidayFound) {
+                showToast(`ไม่สามารถขอหยุดได้ เนื่องจากวันที่ ${holidayFound} ตรงกับวันหยุดนักขัตฤกษ์`, "error");
                 return;
             }
 
-            container.innerHTML = sorted.map((req, index) => {
-                const isApproved = req.status === 'APPROVED';
-                const statusBadge = isApproved 
-                    ? '<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1"><i class="fa-solid fa-lock text-[9px]"></i> อนุมัติแล้ว</span>'
-                    : req.status === 'REJECTED'
-                    ? '<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-[10px] font-semibold">ไม่อนุมัติ</span>'
-                    : '<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-[10px] font-semibold">รออนุมัติ</span>';
+            const newReq = {
+                id: 'req_' + Date.now(),
+                name,
+                dept,
+                type,
+                startDate,
+                endDate,
+                reason,
+                status: 'PENDING',
+                timestamp: Date.now()
+            };
 
-                return `
-                    <div class="p-3.5 bg-slate-50 border border-slate-100 rounded-xl space-y-2 text-xs transition hover:bg-slate-100/60 ${isApproved ? 'border-emerald-200/60' : ''}">
-                        <div class="flex justify-between items-start">
-                            <div class="flex items-center gap-2">
-                                <span class="bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]">#${index + 1}</span>
-                                <span class="font-bold text-slate-700 text-sm">${req.name}</span>
-                                <span class="text-slate-400 text-[10px]">(${req.dept})</span>
-                            </div>
-                            <div>${statusBadge}</div>
-                        </div>
-                        <div class="text-slate-600 pl-7 space-y-0.5">
-                            <p><span class="font-medium text-slate-500">ประเภท:</span> ${req.type}</p>
-                            <p><span class="font-medium text-slate-500">ช่วงวันที่:</span> ${req.startDate} ถึง ${req.endDate}</p>
-                            ${req.reason ? `<p><span class="font-medium text-slate-500">เหตุผล:</span> ${req.reason}</p>` : ''}
-                        </div>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-200/60 pl-7">
-                            <span class="text-[10px] text-slate-400">ยื่นเมื่อ: ${new Date(req.timestamp).toLocaleDateString('th-TH')}</span>
-                            <div class="flex gap-2">
-                                ${!isApproved ? `<button onclick="updateStatus('${req.id}', 'APPROVED')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-[11px] font-medium hover:bg-emerald-700 transition">อนุมัติ (ล็อก)</button>` : `<button onclick="updateStatus('${req.id}', 'PENDING')" class="px-2 py-1 bg-amber-600 text-white rounded-lg text-[10px] hover:bg-amber-700 transition" title="ปลดล็อกคำขอ">ปลดล็อก</button>`}
-                                ${req.status !== 'REJECTED' && !isApproved ? `<button onclick="updateStatus('${req.id}', 'REJECTED')" class="px-2.5 py-1 bg-rose-600 text-white rounded-lg text-[11px] font-medium hover:bg-rose-700 transition">ไม่อนุมัติ</button>` : ''}
-                                <button onclick="deleteRequest('${req.id}')" class="px-2 py-1 bg-slate-200 text-slate-600 rounded-lg text-[11px] hover:bg-slate-300 transition" title="ลบรายการ"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            leaveRequests.push(newReq);
+            saveData();
+            renderAll();
+            closeLeaveModal();
+            document.getElementById('leaveForm').reset();
+            document.getElementById('startDate').value = "2026-12-01";
+            document.getElementById('endDate').value = "2026-12-01";
+            showToast("ยื่นคำขอลาหยุดสำเร็จ", "success");
         }
 
-        function updateStats() {
-            const total = leaveRequests.length;
-            const pending = leaveRequests.filter(r => r.status === 'PENDING').length;
-            const approved = leaveRequests.filter(r => r.status === 'APPROVED').length;
+        function handleCancelSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('cancelName').value.trim();
+            const startDate = document.getElementById('cancelStartDate').value;
+            const endDate = document.getElementById('cancelEndDate').value;
 
-            document.getElementById('statTotal').innerText = total;
-            document.getElementById('statPending').innerText = pending;
-            document.getElementById('statApproved').innerText = approved;
+            const index = leaveRequests.findIndex(r => r.name === name && r.startDate === startDate && r.endDate === endDate);
+            if (index !== -1) {
+                leaveRequests.splice(index, 1);
+                saveData();
+                renderAll();
+                closeCancelModal();
+                document.getElementById('cancelForm').reset();
+                showToast("ยกเลิกคำขอลาหยุดเรียบร้อยแล้ว", "success");
+            } else {
+                showToast("ไม่พบรายการคำขอที่ตรงกับข้อมูลดังกล่าว", "error");
+            }
+        }
+
+        function deleteRequest(id) {
+            if (confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?")) {
+                leaveRequests = leaveRequests.filter(r => r.id !== id);
+                saveData();
+                renderAll();
+                showToast("ลบรายการสำเร็จ", "success");
+            }
         }
 
         function openLeaveModal() {
@@ -597,29 +572,28 @@
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
             document.getElementById('reportTitle').innerText = `รายงานสรุปคำขอลาหยุดประจำเดือน ${TH_MONTHS[month]} ${year + 543}`;
-            document.getElementById('printDate').innerText = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('printDate').innerText = new Date().toLocaleDateString('th-TH');
+
+            const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
+            const monthRequests = leaveRequests.filter(r => r.startDate.startsWith(monthStr) || r.endDate.startsWith(monthStr));
 
             const tbody = document.getElementById('reportTableBody');
-            const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
-            
-            const monthRequests = leaveRequests.filter(r => r.startDate.startsWith(monthPrefix) || r.endDate.startsWith(monthPrefix));
-
             if (monthRequests.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-400">ไม่มีข้อมูลการลาในเดือนนี้</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-400">ไม่มีข้อมูลคำขอในเดือนนี้</td></tr>`;
             } else {
                 tbody.innerHTML = monthRequests.map((r, i) => `
-                    <tr>
+                    <tr class="hover:bg-slate-50">
                         <td class="p-2.5">${i + 1}</td>
-                        <td class="p-2.5 font-semibold">${r.name}</td>
+                        <td class="p-2.5 font-medium">${r.name}</td>
                         <td class="p-2.5">${r.dept}</td>
                         <td class="p-2.5">${r.type}</td>
                         <td class="p-2.5">${r.startDate} ถึง ${r.endDate}</td>
                         <td class="p-2.5">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${r.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : r.status === 'REJECTED' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${r.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' : r.status === 'REJECTED' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'}">
                                 ${r.status === 'APPROVED' ? 'อนุมัติแล้ว' : r.status === 'REJECTED' ? 'ไม่อนุมัติ' : 'รออนุมัติ'}
                             </span>
                         </td>
-                        <td class="p-2.5 text-slate-500">${r.reason || '-'}</td>
+                        <td class="p-2.5">${r.reason || '-'}</td>
                     </tr>
                 `).join('');
             }
@@ -631,111 +605,6 @@
             document.getElementById('reportModal').classList.add('hidden');
         }
 
-        function validateDates(startId, endId) {
-    const start = document.getElementById(startId).value;
-    const end = document.getElementById(endId).value;
-    
-    const oneYearLater = new Date();
-    oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
-    oneYearLater.setHours(0, 0, 0, 0);
-
-    const startDateObj = start ? new Date(start) : null;
-    const endDateObj = end ? new Date(end) : null;
-
-    // ตรวจสอบว่าเกิน 1 ปีหรือไม่
-    if ((startDateObj && startDateObj > oneYearLater) || (endDateObj && endDateObj > oneYearLater)) {
-        showToast("ไม่สามารถขอวันหยุดล่วงหน้าเกิน 1 ปีได้", "error");
-        const maxStr = formatDateKey(oneYearLater);
-        document.getElementById(startId).value = maxStr;
-        document.getElementById(endId).value = maxStr;
-        return;
-    }
-
-    if (start && end && start > end) {
-        document.getElementById(endId).value = start;
-        showToast("วันที่สิ้นสุดต้องไม่ก่อนวันที่เริ่มต้น", "error");
-    }
-}
-
-        function handleLeaveSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('employeeName').value.trim();
-            const dept = document.getElementById('employeeDept').value;
-            const type = document.getElementById('leaveType').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const reason = document.getElementById('leaveReason').value.trim();
-
-            const newReq = {
-                id: "REQ-" + Math.floor(1000 + Math.random() * 9000),
-                name,
-                dept,
-                type,
-                startDate,
-                endDate,
-                reason,
-                status: "PENDING",
-                timestamp: Date.now()
-            };
-
-            leaveRequests.push(newReq);
-            saveData();
-            renderAll();
-            closeLeaveModal();
-            document.getElementById('leaveForm').reset();
-            document.getElementById('startDate').value = formatDateKey(new Date());
-            document.getElementById('endDate').value = formatDateKey(new Date());
-            showToast("ยื่นคำขอลาหยุดสำเร็จ รอการอนุมัติ", "success");
-        }
-
-        function handleCancelSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('cancelName').value.trim();
-            const startDate = document.getElementById('cancelStartDate').value;
-            const endDate = document.getElementById('cancelEndDate').value;
-
-            const index = leaveRequests.findIndex(r => r.name.toLowerCase() === name.toLowerCase() && r.startDate === startDate && r.endDate === endDate);
-
-            if (index === -1) {
-                showToast("ไม่พบรายการลาที่ตรงกับชื่อและช่วงวันที่ระบุ", "error");
-                return;
-            }
-
-            if (leaveRequests[index].status === 'APPROVED') {
-                showToast("รายการนี้ถูกอนุมัติแล้ว ไม่สามารถยกเลิกเองได้ กรุณาติดต่อหัวหน้างาน", "error");
-                return;
-            }
-
-            leaveRequests.splice(index, 1);
-            saveData();
-            renderAll();
-            closeCancelModal();
-            document.getElementById('cancelForm').reset();
-            document.getElementById('cancelStartDate').value = formatDateKey(new Date());
-            document.getElementById('cancelEndDate').value = formatDateKey(new Date());
-            showToast("ยกเลิกคำขอลาหยุดสำเร็จ", "success");
-        }
-
-        function updateStatus(id, newStatus) {
-            const req = leaveRequests.find(r => r.id === id);
-            if (!req) return;
-            req.status = newStatus;
-            saveData();
-            renderAll();
-            showToast(newStatus === 'APPROVED' ? "อนุมัติและล็อกคำขอเรียบร้อยแล้ว" : newStatus === 'REJECTED' ? "ปฏิเสธคำขอเรียบร้อยแล้ว" : "ปลดล็อกคำขอเรียบร้อยแล้ว", "success");
-        }
-
-        function deleteRequest(id) {
-            const req = leaveRequests.find(r => r.id === id);
-            if (req && req.status === 'APPROVED') {
-                if (!confirm("คำขอนี้ได้รับการอนุมัติแล้ว คุณแน่ใจหรือไม่ว่าต้องการลบ?")) return;
-            }
-            leaveRequests = leaveRequests.filter(r => r.id !== id);
-            saveData();
-            renderAll();
-            showToast("ลบรายการสำเร็จ", "success");
-        }
-
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
@@ -743,9 +612,9 @@
 
             toastMessage.innerText = message;
             if (type === 'success') {
-                toastIcon.className = "fa-solid fa-check-circle text-emerald-400";
+                toastIcon.className = 'fa-solid fa-check-circle text-emerald-400';
             } else {
-                toastIcon.className = "fa-solid fa-triangle-exclamation text-amber-400";
+                toastIcon.className = 'fa-solid fa-triangle-exclamation text-rose-400';
             }
 
             toast.classList.remove('translate-y-20', 'opacity-0');
